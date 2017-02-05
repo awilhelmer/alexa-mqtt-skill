@@ -15,8 +15,8 @@ import com.amazon.speech.speechlet.*;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
-import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import de.awilhelmer.alexaskill.mqtt.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,8 +40,7 @@ public class MqttSpeechlet implements Speechlet {
     private static final String VALUE_KEY = "VALUE";
     private static final String VALUE_SLOT = "Value";
 
-    private static final Config CONFIG = ConfigFactory.load("config");
-
+    private static final Config CONFIG = new Config(ConfigFactory.load("config").resolve());
 
     @Override
     public void onSessionStarted(final SessionStartedRequest request, final Session session)
