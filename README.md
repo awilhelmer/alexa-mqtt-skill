@@ -24,18 +24,19 @@ To run this example skill you need to do two things. The first is to deploy the 
 14. Copy the ARN from the top right to be used later in the Alexa Skill Setup.
 
 ### Alexa Skill Setup
-1. Go to the [Alexa Console](https://developer.amazon.com/edw/home.html) and click Add a New Skill.
-2. Set "Mqtt" as the skill name and "activate" as the invocation name, this is what is used to activate your skill. For example you would say: "Alexa, activate something"
-3. Select the Lambda ARN for the skill Endpoint and paste the ARN copied from above. Click Next.
-4. Copy the Intent Schema from the included IntentSchema.json.
-5. Copy the Sample Utterances from the included SampleUtterances.txt. Click Next.
-6. Go back to the skill Information tab and copy the appId. Paste the appId into the MqttRequestStreamHandler.java file for the variable supportedApplicationIds,
+1. Change/Add your devices in LIST_OF_DEVICES
+2. Go to the [Alexa Console](https://developer.amazon.com/edw/home.html) and click Add a New Skill.
+3. Set "Mqtt" as the skill name and "activate" as the invocation name, this is what is used to activate your skill. For example you would say: "Alexa, send device on"
+4. Select the Lambda ARN for the skill Endpoint and paste the ARN copied from above. Click Next.
+5. Copy the Intent Schema from the included IntentSchema.json.
+6. Copy the Sample Utterances from the included SampleUtterances.txt. Click Next.
+7. Go back to the skill Information tab and copy the appId. Paste the appId into the MqttRequestStreamHandler.java file for the variable supportedApplicationIds,
    then update the lambda source zip file with this change and upload to lambda again, this step makes sure the lambda function only serves request from authorized source.
-7. You are now able to start testing your mqtt skill! You should be able to go to the [Echo webpage](http://echo.amazon.com/#skills) and see your skill enabled.
-8. In order to test it, try to say some of the Sample Utterances from the Examples section below.
-9. Your skill is now saved and once you are finished testing you can continue to publish your skill.
+8. You are now able to start testing your mqtt skill! You should be able to go to the [Echo webpage](http://echo.amazon.com/#skills) and see your skill enabled.
+9. In order to test it, try to say some of the Sample Utterances from the Examples section below.
+10. Your skill is now saved and once you are finished testing you can continue to publish your skill.
 
 ## Examples
 ### One-shot model:
-    User: "Alexa, activate <command> <value>"
+    User: "Alexa, send <device> <command> <value>"
     Alexa: "Okay"

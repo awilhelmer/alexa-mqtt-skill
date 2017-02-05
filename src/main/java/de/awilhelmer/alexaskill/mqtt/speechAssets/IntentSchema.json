@@ -1,7 +1,25 @@
 {
   "intents": [
     {
-      "intent": "HelloWorldIntent"
+      "intent": "MqttIntent",
+      "slots": [
+        {
+          "name": "device",
+          "type": "LIST_OF_DEVICES"
+        },
+        {
+          "name": "command",
+          "type": "LIST_OF_COMMANDS"
+        },
+        {
+          "name": "value",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "color",
+          "type": "LIST_OF_COLOR"
+        }
+      ]
     },
     {
       "intent": "AMAZON.HelpIntent"
