@@ -4,19 +4,19 @@
       "intent": "MqttIntent",
       "slots": [
         {
-          "name": "device",
+          "name": "Device",
           "type": "LIST_OF_DEVICES"
         },
         {
-          "name": "command",
+          "name": "Command",
           "type": "LIST_OF_COMMANDS"
         },
         {
-          "name": "value",
+          "name": "Value",
           "type": "AMAZON.NUMBER"
         },
         {
-          "name": "color",
+          "name": "Color",
           "type": "LIST_OF_COLOR"
         }
       ]
