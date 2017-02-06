@@ -45,7 +45,7 @@ public class MqttHandler {
                mqtt.setUserName(config.mqtt_skill.mqtt_host.username);
                mqtt.setPassword(config.mqtt_skill.mqtt_host.password);
             }
-            mqtt.setVersion("3.1.1");
+
             this.connection = mqtt.futureConnection();
             init = true;
          }
