@@ -1,10 +1,7 @@
 package de.awilhelmer.alexaskill.mqtt.handler;
 
 import de.awilhelmer.alexaskill.mqtt.config.Config;
-import org.fusesource.mqtt.client.Future;
-import org.fusesource.mqtt.client.FutureConnection;
-import org.fusesource.mqtt.client.MQTT;
-import org.fusesource.mqtt.client.QoS;
+import org.fusesource.mqtt.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +19,7 @@ public class MqttHandler {
 
    private boolean init = false;
 
-   private FutureConnection connection;
+   private BlockingConnection connection;
 
    private MqttHandler() {
       this.mqtt = new MQTT();
@@ -30,6 +27,7 @@ public class MqttHandler {
 
    public static MqttHandler getInstance() {
       if (INSTANCE == null) {
+         LOG.info("Created new MqttHandler... ");
          INSTANCE = new MqttHandler();
       }
       return INSTANCE;
@@ -46,7 +44,7 @@ public class MqttHandler {
                mqtt.setPassword(config.mqtt_skill.mqtt_host.password);
             }
 
-            this.connection = mqtt.futureConnection();
+            connection = mqtt.blockingConnection();
             init = true;
          }
          catch (URISyntaxException e) {
@@ -59,11 +57,9 @@ public class MqttHandler {
       if (isInit()) {
          if (!this.connection.isConnected()) {
             LOG.info(String.format("Establish MQTT Connection to host %s and user %s ", this.mqtt.getHost(), this.mqtt.getUserName()));
-            Future<Void> connect = this.connection.connect();
             try {
                LOG.info("Waiting for MQTT Connection ... ");
-               connect.await();
-               LOG.info("Connection done ... ");
+               this.connection.connect();
             }
             catch (Exception e) {
                LOG.error("Error reestablishing connection to MQTT Broker", e);
@@ -71,8 +67,14 @@ public class MqttHandler {
          }
 
          if (this.connection.isConnected()) {
-            this.connection.publish(topic, command.getBytes(), QoS.AT_LEAST_ONCE, false);
-            return true;
+            try {
+               this.connection.publish(topic, command.getBytes(), QoS.AT_LEAST_ONCE, false);
+               return true;
+
+            }
+            catch (Exception e) {
+               LOG.error("Error on publish msg: ", e);
+            }
          } else {
             LOG.error("Connection failed, Command not send...");
          }
