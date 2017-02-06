@@ -213,23 +213,23 @@ public class MqttSpeechlet implements Speechlet {
    }
 
    private String getColorCommand(String rgbValue) {
-      switch (rgbValue) {
-         case "green":
-            return "rgb(0,255,0)";
-         case "blue":
-            return "rgb(0,0,255)";
-         case "purple":
-            return "rgb(128,0,128)";
-         case "red":
-            return "rgb(255,0,0)";
-         case "orange":
-            return "rgb(255,69,0)";
-         case "yellow":
-            return "rgb(255,255,0)";
-         case "white":
-            return "rgb(255,255,255)";
-         case "warm":
-            return "rgb(255,244,229)";
+
+      if (rgbValue.equals(texts.getString("green"))) {
+         return "rgb(0,255,0)";
+      }else if (rgbValue.equals(texts.getString("blue"))) {
+         return "rgb(0,0,255)";
+      }else if (rgbValue.equals(texts.getString("purple"))) {
+         return "rgb(128,0,128)";
+      }else if (rgbValue.equals(texts.getString("red"))) {
+         return "rgb(255,0,0)";
+      }else if (rgbValue.equals(texts.getString("orange"))) {
+         return "rgb(255,69,0)";
+      }else if (rgbValue.equals(texts.getString("yellow"))) {
+         return "rgb(255,255,0)";
+      }else if (rgbValue.equals(texts.getString("white"))) {
+         return "rgb(255,255,255)";
+      }else if (rgbValue.equals(texts.getString("warm"))) {
+         return "rgb(255,244,229)";
       }
       return null;
    }
