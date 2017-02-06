@@ -19,3 +19,6 @@ gradlew
 gradlew.bat
 /gradle
 /build
+
+#Never commit accidentally my config.conf
+config.conf

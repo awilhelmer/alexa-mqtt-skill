@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.amazon.alexa:alexa-skills-kit:1.1.2'
+    compile 'com.amazon.alexa:alexa-skills-kit:1.2'
     compile 'com.amazonaws:aws-lambda-java-core:1.0.0'
     compile 'com.amazonaws:aws-java-sdk-dynamodb:1.9.40'
 
@@ -33,8 +33,12 @@ dependencies {
     compile 'org.eclipse.jetty:jetty-server:9.0.6.v20130930'
     compile 'org.eclipse.jetty:jetty-servlet:9.0.6.v20130930'
     compile 'org.slf4j:slf4j-api:1.7.10'
+    compile 'org.slf4j:slf4j-log4j12:1.7.10'
+    compile 'com.amazonaws:aws-lambda-java-log4j:1.0.0'
     compile 'org.fusesource.mqtt-client:mqtt-client:1.14'
     compile 'com.typesafe:config:1.3.1'
+
+    testCompile  'junit:junit:4.12'
 }
 
 task fatJar(type: Jar) {

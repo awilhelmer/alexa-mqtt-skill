@@ -39,24 +39,15 @@ public class MqttHandler {
       if (!init) {
          mqtt.setClientId("Alexa-Skill-Client");
          try {
-            mqtt.setHost(config.mqtt_skill.mqtt_host.hostname, config.mqtt_skill.mqtt_host.port);
+            mqtt.setHost(config.mqtt_skill.mqtt_host.hostname);
 
             if (config.mqtt_skill.mqtt_host.username != null && config.mqtt_skill.mqtt_host.username.length() > 0) {
                mqtt.setUserName(config.mqtt_skill.mqtt_host.username);
                mqtt.setPassword(config.mqtt_skill.mqtt_host.password);
             }
-
+            mqtt.setVersion("3.1.1");
             this.connection = mqtt.futureConnection();
-            Future<Void> connect = this.connection.connect();
-            try {
-               connect.await();
-               LOG.info("MQTT Connection established");
-               init = true;
-            }
-            catch (Exception e) {
-               LOG.error("Error MQTT Connection: ", e);
-            }
-
+            init = true;
          }
          catch (URISyntaxException e) {
             LOG.error("Cannot resolve Host: ", e);
@@ -67,9 +58,12 @@ public class MqttHandler {
    public boolean publish(String topic, String command) {
       if (isInit()) {
          if (!this.connection.isConnected()) {
+            LOG.info(String.format("Establish MQTT Connection to host %s and user %s ", this.mqtt.getHost(), this.mqtt.getUserName()));
             Future<Void> connect = this.connection.connect();
             try {
+               LOG.info("Waiting for MQTT Connection ... ");
                connect.await();
+               LOG.info("Connection done ... ");
             }
             catch (Exception e) {
                LOG.error("Error reestablishing connection to MQTT Broker", e);

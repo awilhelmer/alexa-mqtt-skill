@@ -11,14 +11,7 @@ package de.awilhelmer.alexaskill.mqtt;
 
 import com.amazon.speech.slu.Intent;
 import com.amazon.speech.slu.Slot;
-import com.amazon.speech.speechlet.IntentRequest;
-import com.amazon.speech.speechlet.LaunchRequest;
-import com.amazon.speech.speechlet.Session;
-import com.amazon.speech.speechlet.SessionEndedRequest;
-import com.amazon.speech.speechlet.SessionStartedRequest;
-import com.amazon.speech.speechlet.Speechlet;
-import com.amazon.speech.speechlet.SpeechletException;
-import com.amazon.speech.speechlet.SpeechletResponse;
+import com.amazon.speech.speechlet.*;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
@@ -32,7 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * This sample shows how to create a simple speechlet for handling speechlet requests.
@@ -64,12 +59,17 @@ public class MqttSpeechlet implements Speechlet {
 
    private static final Map<String, Command> COMMANDS = new HashMap<>();
 
+   private ResourceBundle texts;
+
    static {
+      LOG.info("Start static loading...");
       // Init MQTT
       MqttHandler.getInstance().initMqtt(CONFIG);
       // Init Configs
       initDevices();
       initCommands();
+
+      LOG.info("Ended statc loading...");
    }
 
    private static void initCommands() {
@@ -79,7 +79,7 @@ public class MqttSpeechlet implements Speechlet {
          command.setCommand(list$Elm.mqtt_command);
          command.setNumberValue(list$Elm.value);
          if (list$Elm.type != null) {
-            command.setType(DeviceType.valueOf(list$Elm.type));
+            command.setType(DeviceType.valueOf(list$Elm.type.toUpperCase()));
          }
          COMMANDS.put(command.getName(), command);
       }
@@ -102,7 +102,8 @@ public class MqttSpeechlet implements Speechlet {
    @Override
    public void onSessionStarted(final SessionStartedRequest request, final Session session) throws SpeechletException {
       LOG.info("onSessionStarted requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
-
+      Locale.setDefault(request.getLocale());
+      this.texts = ResourceBundle.getBundle("texts");
       // any initialization logic goes here
    }
 
@@ -118,7 +119,6 @@ public class MqttSpeechlet implements Speechlet {
 
       Intent intent = request.getIntent();
       String intentName = (intent != null) ? intent.getName() : null;
-
       if ("MqttIntent".equals(intentName)) {
          return processMqttCommand(intent, session);
       } else if ("AMAZON.HelpIntent".equals(intentName)) {
@@ -152,25 +152,25 @@ public class MqttSpeechlet implements Speechlet {
                Device deviceObj = DEVICES.get(device.getValue().toUpperCase());
                Command commandObj = COMMANDS.get(command.getValue().toUpperCase());
                if (commandObj.getType() != null && commandObj.getType() != deviceObj.getType()) {
-                  speechText = "Command not executable for that device!";
+                  speechText =  texts.getString("wrong-device");
                } else {
                   String mqttCommand = handleDeviceCommand(slots, commandObj);
                   if (mqttCommand != null) {
                      if (MqttHandler.getInstance().publish(deviceObj.getTopic(), mqttCommand)) {
-                        speechText = "Okay.";
+                        speechText = texts.getString("okay");
                      } else {
-                        speechText = "Technical problems. Cannot send your command!";
+                        speechText = texts.getString("tec-error");
                      }
                   } else {
-                     speechText = "Your command isn't specified!";
+                     speechText = texts.getString("command-notvalid");
                   }
                }
 
             } else {
-               speechText = "Command not found!";
+               speechText = texts.getString("no-command");
             }
          } else {
-            speechText = "Device not found!";
+            speechText = texts.getString("no-device");
          }
 
       }
@@ -199,7 +199,7 @@ public class MqttSpeechlet implements Speechlet {
             mqttCommand = getColorCommand(color.getValue());
          }
       } else {
-         if (commandObj.getNumberValue()) {
+         if (commandObj.getNumberValue() != null && commandObj.getNumberValue()) {
             Slot number = slots.get(VALUE_SLOT);
             if (number != null && number.getValue() != null && number.getValue().matches("\\d+")) {
                mqttCommand = mqttCommand.replace(":0", String.format(":%s", number.getValue()));
@@ -237,9 +237,9 @@ public class MqttSpeechlet implements Speechlet {
    private String checkValidation(Slot device, Slot command) {
       String result = null;
       if (device == null || device.getValue() == null) {
-         result = "Didn't recognize the device you want to control!";
+         result = texts.getString("no-device");
       } else if (command == null || command.getValue() == null) {
-         result = String.format("What should i do with Device %s?", device.getValue());
+         result = String.format("%s %s?",texts.getString("what-device"), device.getValue());
       }
       return result;
    }
@@ -250,7 +250,7 @@ public class MqttSpeechlet implements Speechlet {
     * @return SpeechletResponse spoken and visual response for the given intent
     */
    private SpeechletResponse getWelcomeResponse() {
-      String speechText = "Welcome to Mqtt Command control. Please tell me a device and a command.";
+      String speechText = texts.getString("welcome");
 
       // Create the Simple card content.
       SimpleCard card = new SimpleCard();
@@ -274,8 +274,8 @@ public class MqttSpeechlet implements Speechlet {
     * @return SpeechletResponse spoken and visual response for the given intent
     */
    private SpeechletResponse getHelpResponse() {
-      String speechText = "You can say: Send device command. Optional you can say a command value like a number or color.";
 
+      String speechText = texts.getString("help");
       // Create the Simple card content.
       SimpleCard card = new SimpleCard();
       card.setTitle("Mqtt Help");
@@ -291,4 +291,5 @@ public class MqttSpeechlet implements Speechlet {
 
       return SpeechletResponse.newAskResponse(speech, reprompt, card);
    }
+
 }

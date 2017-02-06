@@ -28,7 +28,7 @@ public final class MqttSpeechletRequestStreamHandler extends SpeechletRequestStr
          * This Id can be found on https://developer.amazon.com/edw/home.html#/ "Edit" the relevant
          * Alexa Skill and put the relevant Application Ids in this Set.
          */
-        supportedApplicationIds.add("amzn1.echo-sdk-ams.app.[unique-value-here]");
+        supportedApplicationIds.add("amzn1.ask.skill.f765aca4-0095-4e22-8f78-940ad7127d1e");
     }
 
     public MqttSpeechletRequestStreamHandler() {

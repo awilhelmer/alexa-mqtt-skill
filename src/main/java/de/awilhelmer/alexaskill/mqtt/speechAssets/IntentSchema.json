@@ -17,7 +17,7 @@
         },
         {
           "name": "Color",
-          "type": "LIST_OF_COLOR"
+          "type": "LIST_OF_COLORS"
         }
       ]
     },
