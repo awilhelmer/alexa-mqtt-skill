@@ -16,10 +16,15 @@ public class Config {
          public static class List$Elm {
             public final java.lang.String command;
             public final java.lang.String mqtt_command;
+            public final boolean value;
+            public final java.lang.String type;
 
             public List$Elm(com.typesafe.config.Config c) {
-               this.command = c.hasPathOrNull("command") ? c.getString("command") : "on";
-               this.mqtt_command = c.hasPathOrNull("mqtt-command") ? c.getString("mqtt-command") : "power:1";
+               this.command = c.hasPathOrNull("command") ? c.getString("command") : null;
+               this.mqtt_command = c.hasPathOrNull("mqtt-command") ? c.getString("mqtt-command") : null;
+               this.value = c.hasPathOrNull("value") && c.getBoolean("value");
+               this.type = c.hasPathOrNull("type") ? c.getString("type").toUpperCase() : null;
+
             }
          }
 
@@ -45,9 +50,9 @@ public class Config {
             public final java.lang.String type;
 
             public List$Elm2(com.typesafe.config.Config c) {
-               this.name = c.hasPathOrNull("name") ? c.getString("name") : "kitchen light";
-               this.topic = c.hasPathOrNull("topic") ? c.getString("topic") : "kueche_led";
-               this.type = c.hasPathOrNull("type") ? c.getString("type") : "LED";
+               this.name = c.hasPathOrNull("name") ? c.getString("name") : null;
+               this.topic = c.hasPathOrNull("topic") ? c.getString("topic") : null;
+               this.type = c.hasPathOrNull("type") ? c.getString("type") : null;
             }
          }
 
@@ -71,10 +76,10 @@ public class Config {
          public final java.lang.String username;
 
          public Mqtt_host(com.typesafe.config.Config c) {
-            this.hostname = c.hasPathOrNull("hostname") ? c.getString("hostname") : "";
-            this.password = c.hasPathOrNull("password") ? c.getString("password") : "";
+            this.hostname = c.hasPathOrNull("hostname") ? c.getString("hostname") : null;
+            this.password = c.hasPathOrNull("password") ? c.getString("password") : null;
             this.port = c.hasPathOrNull("port") ? c.getInt("port") : 8883;
-            this.username = c.hasPathOrNull("username") ? c.getString("username") : "";
+            this.username = c.hasPathOrNull("username") ? c.getString("username") : null;
          }
       }
 
