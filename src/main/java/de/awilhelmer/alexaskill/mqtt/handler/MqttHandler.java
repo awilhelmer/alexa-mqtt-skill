@@ -1,11 +1,11 @@
 package de.awilhelmer.alexaskill.mqtt.handler;
 
 import de.awilhelmer.alexaskill.mqtt.config.Config;
-import org.fusesource.mqtt.client.*;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.URISyntaxException;
 
 /**
  * Created by WilhelmerA on 06.02.2017.
@@ -15,14 +15,14 @@ public class MqttHandler {
 
    private static MqttHandler INSTANCE;
 
-   private MQTT mqtt;
+   private MqttClient mqtt;
+
+   MqttConnectOptions options;
 
    private boolean init = false;
 
-   private BlockingConnection connection;
-
    private MqttHandler() {
-      this.mqtt = new MQTT();
+
    }
 
    public static MqttHandler getInstance() {
@@ -35,40 +35,42 @@ public class MqttHandler {
 
    public synchronized void initMqtt(Config config) {
       if (!init) {
-         mqtt.setClientId("Alexa-Skill-Client");
          try {
-            mqtt.setHost(config.mqtt_skill.mqtt_host.hostname);
+            this.mqtt = new MqttClient(config.mqtt_skill.mqtt_host.hostname, "Alexa-Skill-Client", new MemoryPersistence());
+
+            options = new MqttConnectOptions();
 
             if (config.mqtt_skill.mqtt_host.username != null && config.mqtt_skill.mqtt_host.username.length() > 0) {
-               mqtt.setUserName(config.mqtt_skill.mqtt_host.username);
-               mqtt.setPassword(config.mqtt_skill.mqtt_host.password);
+               options.setUserName((config.mqtt_skill.mqtt_host.username));
+               options.setPassword(config.mqtt_skill.mqtt_host.password.toCharArray());
+
             }
 
-            connection = mqtt.blockingConnection();
+            mqtt.connect(options);
             init = true;
          }
-         catch (URISyntaxException e) {
+         catch (Exception e) {
             LOG.error("Cannot resolve Host: ", e);
          }
       }
    }
 
-   public boolean publish(String topic, String command) {
+   public synchronized boolean publish(String topic, String command) {
       if (isInit()) {
-         if (!this.connection.isConnected()) {
-            LOG.info(String.format("Establish MQTT Connection to host %s and user %s ", this.mqtt.getHost(), this.mqtt.getUserName()));
+         if (!mqtt.isConnected()) {
+            LOG.info(String.format("Establish MQTT Connection to host %s ", this.mqtt.getServerURI()));
             try {
                LOG.info("Waiting for MQTT Connection ... ");
-               this.connection.connect();
+               mqtt.connect(options);
             }
             catch (Exception e) {
                LOG.error("Error reestablishing connection to MQTT Broker", e);
             }
          }
 
-         if (this.connection.isConnected()) {
+         if (this.mqtt.isConnected()) {
             try {
-               this.connection.publish(topic, command.getBytes(), QoS.AT_LEAST_ONCE, false);
+               mqtt.publish(topic, command.getBytes(), 0, false);
                return true;
 
             }
