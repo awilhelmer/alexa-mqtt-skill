@@ -11,7 +11,14 @@ package de.awilhelmer.alexaskill.mqtt;
 
 import com.amazon.speech.slu.Intent;
 import com.amazon.speech.slu.Slot;
-import com.amazon.speech.speechlet.*;
+import com.amazon.speech.speechlet.IntentRequest;
+import com.amazon.speech.speechlet.LaunchRequest;
+import com.amazon.speech.speechlet.Session;
+import com.amazon.speech.speechlet.SessionEndedRequest;
+import com.amazon.speech.speechlet.SessionStartedRequest;
+import com.amazon.speech.speechlet.Speechlet;
+import com.amazon.speech.speechlet.SpeechletException;
+import com.amazon.speech.speechlet.SpeechletResponse;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SimpleCard;
@@ -25,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -102,8 +108,7 @@ public class MqttSpeechlet implements Speechlet {
    @Override
    public void onSessionStarted(final SessionStartedRequest request, final Session session) throws SpeechletException {
       LOG.info("onSessionStarted requestId={}, sessionId={}", request.getRequestId(), session.getSessionId());
-      Locale.setDefault(request.getLocale());
-      this.texts = ResourceBundle.getBundle("texts");
+      this.texts = ResourceBundle.getBundle("texts", request.getLocale());
       // any initialization logic goes here
    }
 

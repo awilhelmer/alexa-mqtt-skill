@@ -1,9 +1,13 @@
 #MQTT AWS Lambda function for Alexa
 
-A simple [AWS Lambda](http://aws.amazon.com/lambda) function that demonstrates how to write a skill for the Amazon Echo using the Alexa SDK.
+A simple [AWS Lambda](http://aws.amazon.com/lambda) function that sends commands via MQTT to your devices. 
+
+### THIS IS A PERSONAL DEVELOPER SKILL. DO NOT SUBMIT THIS TO AMAZON FOR CERTIFICATION
 
 ## Concepts
-This simple sample has no external dependencies or session management, and shows the most basic example of how to create a Lambda function for handling Alexa Skill requests.
+This simple skill use the ask schema from amazon alexa. This isn't a smart home skill yet, but feel free to migrate it if u have an idea to link a
+MQTT Broker with Account linking.
+
 
 ## Setup
 To run this example skill you need to do two things. The first is to deploy the example code in lambda, and the second is to configure the Alexa skill to use Lambda.
@@ -25,9 +29,9 @@ To run this example skill you need to do two things. The first is to deploy the 
 14. Copy the ARN from the top right to be used later in the Alexa Skill Setup.
 
 ### Alexa Skill Setup
-1. Change/Add your devices in LIST_OF_DEVICES and add it in the config.conf. IMPORTANT!!! Configure commands and device names in your language! See https://github.com/fusesource/mqtt-client for SSL Connections (ssl:// in host! Port in Host!) 
+1. Change/Add your devices in LIST_OF_DEVICES and add it in the config.conf. IMPORTANT!!! Configure commands and device names in your language! Don't use whitespaces in this names! See https://github.com/fusesource/mqtt-client for SSL Connections (ssl:// in host! Port in Host!) 
 2. Go to the [Alexa Console](https://developer.amazon.com/edw/home.html) and click Add a New Skill.
-3. Set "Mqtt" as the skill name and "bimsen" as the invocation name, this is what is used to activate your skill. For example you would say: "Alexa, ask bimsen <YOUR DEVICE> on" You can change the invocation name!
+3. Set "Mqtt" as the skill name and "broker" as the invocation name, this is what is used to activate your skill. For example you would say: "Alexa, ask broker <YOUR DEVICE> on" You can change the invocation name as you want.
 4. Select the Lambda ARN for the skill Endpoint and paste the ARN copied from above. Click Next.
 5. Copy the Intent Schema from the included IntentSchema.json.
 6. Copy the Sample Utterances from the included SampleUtterances.txt. Click Next.
@@ -39,5 +43,5 @@ To run this example skill you need to do two things. The first is to deploy the 
 
 ## Examples
 ### One-shot model:
-    User: "Alexa, ask bimsen <device> <command> <value>"
+    User: "Alexa, ask broker <device> <command> <value>"
     Alexa: "Okay"
