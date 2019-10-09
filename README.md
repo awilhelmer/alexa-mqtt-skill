@@ -1,6 +1,6 @@
 # MQTT AWS Lambda function for Alexa
 
-A simple [AWS Lambda](http://aws.amazon.com/lambda) function that sends commands via MQTT to your devices. Configurable MQTT Comannds in https://github.com/awilhelmer/alexa-mqtt-skill/blob/master/src/main/resources/config.conf
+A simple [AWS Lambda](http://aws.amazon.com/lambda) function that sends commands via MQTT to your devices. Configurable MQTT Commands in https://github.com/awilhelmer/alexa-mqtt-skill/blob/master/src/main/resources/config.conf
 
 ### THIS IS A PERSONAL DEVELOPER SKILL. DO NOT SUBMIT THIS TO AMAZON FOR CERTIFICATION
 
