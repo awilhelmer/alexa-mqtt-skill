@@ -1,0 +1,147 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "broker",
+            "intents": [
+                {
+                    "name": "MqttIntent",
+                    "slots": [
+                        {
+                            "name": "Device",
+                            "type": "LIST_OF_DEVICES"
+                        },
+                        {
+                            "name": "Command",
+                            "type": "LIST_OF_COMMANDS"
+                        },
+                        {
+                            "name": "Value",
+                            "type": "AMAZON.NUMBER"
+                        },
+                        {
+                            "name": "Color",
+                            "type": "LIST_OF_COLORS"
+                        }
+                    ],
+                    "samples": [
+                        "{Device} {Command} {Value}",
+                        "{Device} {Command} {Color}",
+                        "{Device} {Command}",
+                        "{Device}"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                }
+            ],
+            "types": [
+                {
+                    "name": "LIST_OF_COLORS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "green"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "blue"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "purple"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "red"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "orange"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "yellow"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "white"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "warm"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "LIST_OF_COMMANDS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "on"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "off"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "power on"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "power off"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "color"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "darker"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dark"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bright"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pattern"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "LIST_OF_DEVICES",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "kitchenlight"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
